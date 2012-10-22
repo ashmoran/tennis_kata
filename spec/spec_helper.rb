@@ -10,8 +10,11 @@ module TennisSpec
   end
 
   module ExampleGroupMethods
-    def score_is_now(score)
-      specify { expect(@score).to be == score }
+    def game_started(&block)
+      context "game started" do
+        before(:each) { tennis.start_game }
+        class_eval(&block)
+      end
     end
 
     def point_to_player(player, &block)
@@ -19,6 +22,10 @@ module TennisSpec
         before(:each) { tennis.send(:"point_to_player_#{player}") }
         class_eval(&block)
       end
+    end
+
+    def score_is_now(score)
+      specify { expect(@score).to be == score }
     end
   end
 

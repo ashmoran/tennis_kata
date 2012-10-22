@@ -21,13 +21,8 @@ describe Tennis do
     end
   end
 
-  describe "starting the game" do
-    before { tennis.start_game }
+  game_started do
     score_is_now "0-0"
-  end
-
-  describe "scoring" do
-    before(:each) { tennis.start_game }
 
     context "with no advantages" do
       point_to_player :a do
