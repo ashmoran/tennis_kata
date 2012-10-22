@@ -7,7 +7,7 @@ class Tennis
     end
 
     event :player_b_won do
-      transition :in_progress => :won_by_b
+      transition [:in_progress, :advantage_to_b] => :won_by_b
     end
 
     event :reached_deuce do
@@ -72,6 +72,11 @@ class Tennis
     end
 
     state :advantage_to_b do
+      def point_to_player_b
+        player_b_won
+        score_changed
+      end
+
       def score_for_display
         "40-40 advantage B"
       end
