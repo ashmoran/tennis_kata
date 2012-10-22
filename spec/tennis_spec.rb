@@ -3,6 +3,8 @@ require 'spec_helper'
 require 'tennis'
 
 describe Tennis do
+  include TennisSpec
+
   subject(:tennis) { Tennis.new(self) }
 
   # Self-shunt
@@ -62,8 +64,7 @@ describe Tennis do
           score_is_now "30-0"
         end
 
-        context "B" do
-          before(:each) { tennis.point_to_player_b }
+        point_to_player :b do
           score_is_now "15-15"
 
           point_to_player :a do
@@ -120,22 +121,19 @@ describe Tennis do
           score_is_now "Game to A"
         end
 
-        context "B" do
-          before(:each) { tennis.point_to_player_b }
+        point_to_player :b do
           score_is_now "40-40 deuce"
         end
       end
 
-      context "B" do
-        before(:each) { tennis.point_to_player_b }
+      point_to_player :b do
         score_is_now "40-40 advantage B"
 
         point_to_player :a do
           score_is_now "40-40 deuce"
         end
 
-        context "B" do
-          before(:each) { tennis.point_to_player_b }
+        point_to_player :b do
           score_is_now "Game to B"
         end
       end
