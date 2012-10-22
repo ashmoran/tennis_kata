@@ -10,9 +10,19 @@ class Tennis
       transition :in_progress => :won_by_b
     end
 
+    event :reached_deuce do
+      transition :in_progress => :deuce
+    end
+
     state :in_progress do
       def score_for_display
         "#{format_score(@player_a_score)}-#{format_score(@player_b_score)}"
+      end
+    end
+
+    state :deuce do
+      def score_for_display
+        "40-40 deuce"
       end
     end
 
@@ -43,12 +53,14 @@ class Tennis
 
   def point_to_player_a
     @player_a_score += 1
+    reached_deuce if @player_a_score == 3 && @player_b_score == 3
     player_a_won if @player_a_score == 4
     score_changed
   end
 
   def point_to_player_b
     @player_b_score += 1
+    reached_deuce if @player_a_score == 3 && @player_b_score == 3
     player_b_won if @player_b_score == 4
     score_changed
   end
