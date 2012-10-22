@@ -70,6 +70,17 @@ class Tennis
       def score_for_display
         "#{format_score(@player_a_score)}-#{format_score(@player_b_score)}"
       end
+
+      SCORE_FORMATS = {
+        0 => 0,
+        1 => 15,
+        2 => 30,
+        3 => 40
+      }
+
+      def format_score(score)
+        SCORE_FORMATS[score]
+      end
     end
 
     state :deuce do
@@ -147,16 +158,5 @@ class Tennis
 
   def score_changed
     @scoreboard.score_changed(score_for_display)
-  end
-
-  SCORE_FORMATS = {
-    0 => 0,
-    1 => 15,
-    2 => 30,
-    3 => 40
-  }
-
-  def format_score(score)
-    SCORE_FORMATS[score]
   end
 end
