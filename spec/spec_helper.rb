@@ -21,8 +21,12 @@ module TennisSpec
       end
     end
 
-    def score_is_now(score)
-      specify { expect(@score).to be == score }
+    def to_expect(name, &expectation_definition)
+      singleton_class.send(:define_method, name) do |*args|
+        specify {
+          instance_exec(*args, &expectation_definition)
+        }
+      end
     end
   end
 
