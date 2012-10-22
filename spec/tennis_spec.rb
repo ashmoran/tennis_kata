@@ -19,10 +19,32 @@ describe Tennis do
     end
   end
 
-  context "game started" do
-    it "score starts at 0-0" do
+  describe "starting the game" do
+    specify "score starts at 0-0" do
       tennis.start_game
       expect(@score).to be == "0-0"
+    end
+  end
+
+  describe "scoring" do
+    before(:each) { tennis.start_game }
+
+    context "A" do
+      before(:each) { tennis.point_to_player_a }
+
+      specify { expect(@score).to be == "15-0" }
+
+      context "A" do
+        before(:each) { tennis.point_to_player_a }
+
+        specify { expect(@score).to be == "30-0" }
+      end
+
+      context "B" do
+        before(:each) { tennis.point_to_player_b }
+
+        specify { expect(@score).to be == "15-15" }
+      end
     end
   end
 end
