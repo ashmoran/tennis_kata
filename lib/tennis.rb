@@ -2,15 +2,13 @@ require 'state_machine'
 
 class Tennis
   state_machine initial: :in_progress do
-    # event :point_to_player_a do
-    #   transition :in_progress => :won_by_a
-    # end
-
     event :player_a_won do
       transition :in_progress => :won_by_a
     end
 
-    # after_transition any => :won_by_a, do: :score_changed
+    event :player_b_won do
+      transition :in_progress => :won_by_b
+    end
 
     state :in_progress do
       def score_for_display
@@ -21,6 +19,12 @@ class Tennis
     state :won_by_a do
       def score_for_display
         "Game to A"
+      end
+    end
+
+    state :won_by_b do
+      def score_for_display
+        "Game to B"
       end
     end
   end
@@ -45,6 +49,7 @@ class Tennis
 
   def point_to_player_b
     @player_b_score += 1
+    player_b_won if @player_b_score == 4
     score_changed
   end
 
