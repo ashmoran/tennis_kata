@@ -17,6 +17,12 @@ module TennisSpec
       end
     end
 
+    def game_not_started(&block)
+      context "game not started" do
+        class_eval(&block)
+      end
+    end
+
     def point_to_player(player, &block)
       context "#{player.to_s.upcase}" do
         before(:each) { tennis.send(:"point_to_player_#{player}") }

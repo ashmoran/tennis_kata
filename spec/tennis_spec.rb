@@ -7,17 +7,10 @@ describe Tennis do
 
   subject(:tennis) { Tennis.new(self) }
 
-  context "game not started" do
-    describe "trying to score" do
-      it "raises an error" do
-        expect {
-          tennis.point_to_player_a
-        }.to raise_error(RuntimeError, "Game has not started yet")
-
-        expect {
-          tennis.point_to_player_b
-        }.to raise_error(RuntimeError, "Game has not started yet")
-      end
+  game_not_started do
+    it "is not ready for players to score points" do
+      expect { tennis.point_to_player_a }.to raise_error(RuntimeError, "Game has not started yet")
+      expect { tennis.point_to_player_b }.to raise_error(RuntimeError, "Game has not started yet")
     end
   end
 
