@@ -17,6 +17,15 @@ describe Tennis do
     it "has not broadcast a score" do
       expect(@score).to be == :game_not_started
     end
+
+    describe "trying to score" do
+      it "raises an error" do
+        pending
+        expect {
+          tennis.point_to_player_a
+        }.to raise_error(KeyError)
+      end
+    end
   end
 
   describe "starting the game" do
@@ -49,6 +58,11 @@ describe Tennis do
           context "A" do
             before(:each) { tennis.point_to_player_a }
             specify { expect(@score).to be == "40-15" }
+
+            context "A" do
+              before(:each) { tennis.point_to_player_a }
+              specify { expect(@score).to be == "Game to A" }
+            end
           end
         end
       end
