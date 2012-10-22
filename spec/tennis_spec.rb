@@ -31,6 +31,13 @@ describe Tennis do
       end
     end
 
+    for_context :deuce do
+      3.times do
+        tennis.point_to_player_a
+        tennis.point_to_player_b
+      end
+    end
+
     to_expect :score_is_now do |expected_score|
       expect(@score).to be == expected_score
     end
@@ -76,14 +83,7 @@ describe Tennis do
       end
     end
 
-    context "deuce" do
-      before(:each) do
-        3.times do
-          tennis.point_to_player_a
-          tennis.point_to_player_b
-        end
-      end
-
+    deuce do
       score_is_now "40-40 deuce"
 
       point_to_player :a do
