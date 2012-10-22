@@ -18,6 +18,10 @@ class Tennis
       transition :deuce => :advantage_to_a
     end
 
+    event :player_b_gained_advantage do
+      transition :deuce => :advantage_to_b
+    end
+
     state :in_progress do
       def point_to_player_a
         @player_a_score += 1
@@ -45,6 +49,12 @@ class Tennis
         score_changed
       end
 
+      def point_to_player_b
+        # @player_a_score += 1 # I don't think we need this
+        player_b_gained_advantage
+        score_changed
+      end
+
       def score_for_display
         "40-40 deuce"
       end
@@ -53,6 +63,12 @@ class Tennis
     state :advantage_to_a do
       def score_for_display
         "40-40 advantage A"
+      end
+    end
+
+    state :advantage_to_b do
+      def score_for_display
+        "40-40 advantage B"
       end
     end
 
