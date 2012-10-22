@@ -7,6 +7,22 @@ describe Tennis do
 
   subject(:tennis) { Tennis.new(self) }
 
+  for_context :game_not_started do
+    nothing
+  end
+
+  for_context :game_started do
+    tennis.start_game
+  end
+
+  for_context :point_to_player do |player|
+    if player == :a
+      tennis.point_to_player_a
+    else
+      tennis.point_to_player_b
+    end
+  end
+
   game_not_started do
     it "is not ready for players to score points" do
       expect { tennis.point_to_player_a }.to raise_error(RuntimeError, "Game has not started yet")

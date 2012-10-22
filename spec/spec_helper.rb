@@ -10,23 +10,14 @@ module TennisSpec
   end
 
   module ExampleGroupMethods
-    def game_started(&block)
-      context "game started" do
-        before(:each) { tennis.start_game }
-        class_eval(&block)
-      end
-    end
-
-    def game_not_started(&block)
-      context "game not started" do
-        class_eval(&block)
-      end
-    end
-
-    def point_to_player(player, &block)
-      context "#{player.to_s.upcase}" do
-        before(:each) { tennis.send(:"point_to_player_#{player}") }
-        class_eval(&block)
+    def for_context(name, &context_definition)
+      singleton_class.send(:define_method, name) do |*args, &specification_body|
+        context(name) do
+          before(:each) do
+            instance_exec(*args, &context_definition)
+          end
+          class_eval(&specification_body)
+        end
       end
     end
 
@@ -38,6 +29,10 @@ module TennisSpec
   # Self-shunt
   def score_changed(new_score)
     @score = new_score
+  end
+
+  def nothing
+    # NOOP
   end
 end
 
