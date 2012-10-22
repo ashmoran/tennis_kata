@@ -22,6 +22,10 @@ class Tennis
       transition :deuce => :advantage_to_b
     end
 
+    event :player_b_reduced_the_advantage do
+      transition :advantage_to_a => :deuce
+    end
+
     state :in_progress do
       def point_to_player_a
         @player_a_score += 1
@@ -63,6 +67,11 @@ class Tennis
     state :advantage_to_a do
       def point_to_player_a
         player_a_won
+        score_changed
+      end
+
+      def point_to_player_b
+        player_b_reduced_the_advantage
         score_changed
       end
 
