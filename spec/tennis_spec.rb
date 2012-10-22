@@ -70,19 +70,6 @@ describe Tennis do
       end
     end
 
-    # This example exists because duplication in the implementation means a single
-    # context for deuce (below) is not enough to prove the code works in all situations
-    describe "deuce can be reached by either players hitting 40 in either order" do
-      before do
-        3.times do
-          tennis.point_to_player_b
-          tennis.point_to_player_a
-        end
-      end
-
-      score_is_now "40-40 deuce"
-    end
-
     context "deuce" do
       before(:each) do
         3.times do

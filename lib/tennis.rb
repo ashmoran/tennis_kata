@@ -7,6 +7,10 @@ class Tennis
     end
 
     after_transition :not_started => :in_progress, do: :score_changed
+    after_transition :deuce => [:advantage_to_a, :advantage_to_b], do: :score_changed
+    after_transition [:advantage_to_a, :advantage_to_b] => :deuce, do: :score_changed
+    after_transition :advantage_to_a => :won_by_a, do: :score_changed
+    after_transition :advantage_to_b => :won_by_b, do: :score_changed
 
     event :player_a_won do
       transition [:in_progress, :advantage_to_a] => :won_by_a
@@ -54,21 +58,26 @@ class Tennis
 
     state :in_progress do
       def point_to_player_a
-        @player_a_score += 1
-        reached_deuce if @player_a_score == 3 && @player_b_score == 3
-        player_a_won if @player_a_score == 4
-        score_changed
+        point_to_player(:a)
       end
 
       def point_to_player_b
-        @player_b_score += 1
-        reached_deuce if @player_a_score == 3 && @player_b_score == 3
-        player_b_won if @player_b_score == 4
+        point_to_player(:b)
+      end
+
+      def point_to_player(player)
+        @scores[player] += 1
+
+        reached_deuce if @scores.values == [ 3, 3 ]
+
+        player_a_won if @scores[:a] == 4
+        player_b_won if @scores[:b] == 4
+
         score_changed
       end
 
       def score_for_display
-        "#{format_score(@player_a_score)}-#{format_score(@player_b_score)}"
+        "#{format_score(@scores[:a])}-#{format_score(@scores[:b])}"
       end
 
       SCORE_FORMATS = {
@@ -87,13 +96,11 @@ class Tennis
       def point_to_player_a
         # @player_a_score += 1 # I don't think we need this
         player_a_gained_advantage
-        score_changed
       end
 
       def point_to_player_b
         # @player_a_score += 1 # I don't think we need this
         player_b_gained_advantage
-        score_changed
       end
 
       def score_for_display
@@ -104,12 +111,10 @@ class Tennis
     state :advantage_to_a do
       def point_to_player_a
         player_a_won
-        score_changed
       end
 
       def point_to_player_b
         player_b_reduced_the_advantage
-        score_changed
       end
 
       def score_for_display
@@ -120,12 +125,10 @@ class Tennis
     state :advantage_to_b do
       def point_to_player_a
         player_a_reduced_the_advantage
-        score_changed
       end
 
       def point_to_player_b
         player_b_won
-        score_changed
       end
 
       def score_for_display
@@ -150,8 +153,7 @@ class Tennis
     super()
 
     @scoreboard = scoreboard
-    @player_a_score = 0
-    @player_b_score = 0
+    @scores = { a: 0, b: 0 }
   end
 
   private
