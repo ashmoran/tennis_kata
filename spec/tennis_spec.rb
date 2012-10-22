@@ -14,10 +14,13 @@ describe Tennis do
 
     describe "trying to score" do
       it "raises an error" do
-        pending
         expect {
           tennis.point_to_player_a
-        }.to raise_error(KeyError)
+        }.to raise_error(RuntimeError, "Game has not started yet")
+
+        expect {
+          tennis.point_to_player_b
+        }.to raise_error(RuntimeError, "Game has not started yet")
       end
     end
   end

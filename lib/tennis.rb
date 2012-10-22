@@ -1,7 +1,13 @@
 require 'state_machine'
 
 class Tennis
-  state_machine initial: :in_progress do
+  state_machine initial: :not_started do
+    event :start_game do
+      transition :not_started => :in_progress
+    end
+
+    after_transition :not_started => :in_progress, do: :score_changed
+
     event :player_a_won do
       transition [:in_progress, :advantage_to_a] => :won_by_a
     end
@@ -28,6 +34,22 @@ class Tennis
 
     event :player_b_reduced_the_advantage do
       transition :advantage_to_a => :deuce
+    end
+
+    state :not_started do
+      def point_to_player_a
+        raise_error
+      end
+
+      def point_to_player_b
+        raise_error
+      end
+
+      private
+
+      def raise_error
+        raise RuntimeError.new("Game has not started yet")
+      end
     end
 
     state :in_progress do
@@ -119,10 +141,6 @@ class Tennis
     @scoreboard = scoreboard
     @player_a_score = 0
     @player_b_score = 0
-  end
-
-  def start_game
-    score_changed
   end
 
   private
