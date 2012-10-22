@@ -22,6 +22,13 @@ describe Tennis do
     specify { score_is_now(score) }
   end
 
+  def self.point_to_player(player, &block)
+    context "#{player.to_s.upcase}" do
+      before(:each) { tennis.send(:"point_to_player_#{player}") }
+      class_eval(&block)
+    end
+  end
+
   context "game not started" do
     it "has not broadcast a score" do
       expect(@score).to be == :game_not_started
@@ -48,12 +55,10 @@ describe Tennis do
     before(:each) { tennis.start_game }
 
     context "with no advantages" do
-      context "A" do
-        before(:each) { tennis.point_to_player_a }
+      point_to_player :a do
         score_is_now "15-0"
 
-        context "A" do
-          before(:each) { tennis.point_to_player_a }
+        point_to_player :a do
           score_is_now "30-0"
         end
 
@@ -61,16 +66,13 @@ describe Tennis do
           before(:each) { tennis.point_to_player_b }
           score_is_now "15-15"
 
-          context "A" do
-            before(:each) { tennis.point_to_player_a }
+          point_to_player :a do
             score_is_now "30-15"
 
-            context "A" do
-              before(:each) { tennis.point_to_player_a }
+            point_to_player :a do
               score_is_now "40-15"
 
-              context "A" do
-                before(:each) { tennis.point_to_player_a }
+              point_to_player :a do
                 score_is_now "Game to A"
               end
             end
@@ -111,12 +113,10 @@ describe Tennis do
 
       score_is_now "40-40 deuce"
 
-      context "A" do
-        before(:each) { tennis.point_to_player_a }
+      point_to_player :a do
         score_is_now "40-40 advantage A"
 
-        context "A" do
-          before(:each) { tennis.point_to_player_a }
+        point_to_player :a do
           score_is_now "Game to A"
         end
 
@@ -130,8 +130,7 @@ describe Tennis do
         before(:each) { tennis.point_to_player_b }
         score_is_now "40-40 advantage B"
 
-        context "A" do
-          before(:each) { tennis.point_to_player_a }
+        point_to_player :a do
           score_is_now "40-40 deuce"
         end
 
