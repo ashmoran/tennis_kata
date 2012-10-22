@@ -10,6 +10,11 @@ module TennisSpec
   end
 
   module ExampleGroupMethods
+    def specification_dsl(name, &dsl_definition)
+      # Name isn't use, I just thought it reads nicer with one
+      class_eval(&dsl_definition)
+    end
+
     def for_context(name, &context_definition)
       singleton_class.send(:define_method, name) do |*args, &specification_body|
         context(name) do
