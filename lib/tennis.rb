@@ -3,7 +3,7 @@ require 'state_machine'
 class Tennis
   state_machine initial: :in_progress do
     event :player_a_won do
-      transition :in_progress => :won_by_a
+      transition [:in_progress, :advantage_to_a] => :won_by_a
     end
 
     event :player_b_won do
@@ -61,6 +61,11 @@ class Tennis
     end
 
     state :advantage_to_a do
+      def point_to_player_a
+        player_a_won
+        score_changed
+      end
+
       def score_for_display
         "40-40 advantage A"
       end
