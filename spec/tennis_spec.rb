@@ -21,10 +21,13 @@ describe Tennis do
     end
 
     for_context :point_to_player do |player|
-      if player == :a
-        tennis.point_to_player_a
-      else
-        tennis.point_to_player_b
+      player == :a ? tennis.point_to_player_a : tennis.point_to_player_b
+    end
+
+    # Only wrote this one to see if `points_scored :b, :b, :b, :b` would work
+    for_context :points_scored do |*players|
+      players.each do |player|
+        player == :a ? tennis.point_to_player_a : tennis.point_to_player_b
       end
     end
 
@@ -68,14 +71,7 @@ describe Tennis do
         end
       end
 
-      context "B B B B" do
-        before(:each) do
-          tennis.point_to_player_b
-          tennis.point_to_player_b
-          tennis.point_to_player_b
-          tennis.point_to_player_b
-        end
-
+      points_scored :b, :b, :b, :b do
         score_is_now "Game to B"
       end
     end
