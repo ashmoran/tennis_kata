@@ -14,15 +14,45 @@ class Tennis
       transition :in_progress => :deuce
     end
 
+    event :player_a_gained_advantage do
+      transition :deuce => :advantage_to_a
+    end
+
     state :in_progress do
+      def point_to_player_a
+        @player_a_score += 1
+        reached_deuce if @player_a_score == 3 && @player_b_score == 3
+        player_a_won if @player_a_score == 4
+        score_changed
+      end
+
+      def point_to_player_b
+        @player_b_score += 1
+        reached_deuce if @player_a_score == 3 && @player_b_score == 3
+        player_b_won if @player_b_score == 4
+        score_changed
+      end
+
       def score_for_display
         "#{format_score(@player_a_score)}-#{format_score(@player_b_score)}"
       end
     end
 
     state :deuce do
+      def point_to_player_a
+        # @player_a_score += 1 # I don't think we need this
+        player_a_gained_advantage
+        score_changed
+      end
+
       def score_for_display
         "40-40 deuce"
+      end
+    end
+
+    state :advantage_to_a do
+      def score_for_display
+        "40-40 advantage A"
       end
     end
 
@@ -48,20 +78,6 @@ class Tennis
   end
 
   def start_game
-    score_changed
-  end
-
-  def point_to_player_a
-    @player_a_score += 1
-    reached_deuce if @player_a_score == 3 && @player_b_score == 3
-    player_a_won if @player_a_score == 4
-    score_changed
-  end
-
-  def point_to_player_b
-    @player_b_score += 1
-    reached_deuce if @player_a_score == 3 && @player_b_score == 3
-    player_b_won if @player_b_score == 4
     score_changed
   end
 
