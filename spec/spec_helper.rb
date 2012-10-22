@@ -3,10 +3,6 @@ require 'ap'
 module TennisSpec
   def self.included(host)
     host.extend(ExampleGroupMethods)
-
-    host.before(:each) do
-      @score = :game_not_started
-    end
   end
 
   module ExampleGroupMethods

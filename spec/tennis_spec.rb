@@ -8,7 +8,11 @@ describe Tennis do
   subject(:tennis) { Tennis.new(self) }
 
   def score_changed(new_score)
-    @score = new_score
+    @scores << new_score
+  end
+
+  before(:each) do
+    @scores = [ ]
   end
 
   specification_dsl :tennis do
@@ -39,7 +43,10 @@ describe Tennis do
     end
 
     to_expect :score_is_now do |expected_score|
-      expect(@score).to be == expected_score
+      expect(@scores.last).to be == expected_score
+      # I don't like the next line but I put it in purely to prove we can
+      # easily add a check for the same score being sent more than once
+      expect(@scores.last).to_not be == @scores[-2]
     end
 
     game_not_started do
