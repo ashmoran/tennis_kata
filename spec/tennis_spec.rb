@@ -7,30 +7,6 @@ describe Tennis do
 
   subject(:tennis) { Tennis.new(self) }
 
-  # Self-shunt
-  def score_changed(new_score)
-    @score = new_score
-  end
-
-  before(:each) do
-    @score = :game_not_started
-  end
-
-  def score_is_now(score)
-    expect(@score).to be == score
-  end
-
-  def self.score_is_now(score)
-    specify { score_is_now(score) }
-  end
-
-  def self.point_to_player(player, &block)
-    context "#{player.to_s.upcase}" do
-      before(:each) { tennis.send(:"point_to_player_#{player}") }
-      class_eval(&block)
-    end
-  end
-
   context "game not started" do
     it "has not broadcast a score" do
       expect(@score).to be == :game_not_started
@@ -47,10 +23,8 @@ describe Tennis do
   end
 
   describe "starting the game" do
-    specify "score starts at 0-0" do
-      tennis.start_game
-      score_is_now "0-0"
-    end
+    before { tennis.start_game }
+    score_is_now "0-0"
   end
 
   describe "scoring" do
@@ -95,10 +69,12 @@ describe Tennis do
 
     # This example exists because duplication in the implementation means a single
     # context for deuce (below) is not enough to prove the code works in all situations
-    specify "deuce can be reached by either players hitting 40 in either order" do
-      3.times do
-        tennis.point_to_player_b
-        tennis.point_to_player_a
+    describe "deuce can be reached by either players hitting 40 in either order" do
+      before do
+        3.times do
+          tennis.point_to_player_b
+          tennis.point_to_player_a
+        end
       end
 
       score_is_now "40-40 deuce"
