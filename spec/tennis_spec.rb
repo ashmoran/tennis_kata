@@ -5,12 +5,17 @@ require 'tennis'
 describe Tennis do
   subject(:tennis) { Tennis.new(self) }
 
+  # Self-shunt
   def score_changed(new_score)
     @score = new_score
   end
 
   before(:each) do
     @score = :game_not_started
+  end
+
+  def score_is_now(score)
+    expect(@score).to be == score
   end
 
   context "game not started" do
@@ -31,7 +36,7 @@ describe Tennis do
   describe "starting the game" do
     specify "score starts at 0-0" do
       tennis.start_game
-      expect(@score).to be == "0-0"
+      score_is_now "0-0"
     end
   end
 
@@ -41,28 +46,28 @@ describe Tennis do
     context "with no advantages" do
       context "A" do
         before(:each) { tennis.point_to_player_a }
-        specify { expect(@score).to be == "15-0" }
+        specify { score_is_now "15-0" }
 
         context "A" do
           before(:each) { tennis.point_to_player_a }
-          specify { expect(@score).to be == "30-0" }
+          specify { score_is_now "30-0" }
         end
 
         context "B" do
           before(:each) { tennis.point_to_player_b }
-          specify { expect(@score).to be == "15-15" }
+          specify { score_is_now "15-15" }
 
           context "A" do
             before(:each) { tennis.point_to_player_a }
-            specify { expect(@score).to be == "30-15" }
+            specify { score_is_now "30-15" }
 
             context "A" do
               before(:each) { tennis.point_to_player_a }
-              specify { expect(@score).to be == "40-15" }
+              specify { score_is_now "40-15" }
 
               context "A" do
                 before(:each) { tennis.point_to_player_a }
-                specify { expect(@score).to be == "Game to A" }
+                specify { score_is_now "Game to A" }
               end
             end
           end
@@ -77,7 +82,7 @@ describe Tennis do
           tennis.point_to_player_b
         end
 
-        specify { expect(@score).to be == "Game to B" }
+        specify { score_is_now "Game to B" }
       end
     end
 
@@ -89,7 +94,7 @@ describe Tennis do
         tennis.point_to_player_a
       end
 
-      expect(@score).to be == "40-40 deuce"
+      score_is_now "40-40 deuce"
     end
 
     context "deuce" do
@@ -100,35 +105,35 @@ describe Tennis do
         end
       end
 
-      specify { expect(@score).to be == "40-40 deuce" }
+      specify { score_is_now "40-40 deuce" }
 
       context "A" do
         before(:each) { tennis.point_to_player_a }
-        specify { expect(@score).to be == "40-40 advantage A" }
+        specify { score_is_now "40-40 advantage A" }
 
         context "A" do
           before(:each) { tennis.point_to_player_a }
-          specify { expect(@score).to be == "Game to A" }
+          specify { score_is_now "Game to A" }
         end
 
         context "B" do
           before(:each) { tennis.point_to_player_b }
-          specify { expect(@score).to be == "40-40 deuce" }
+          specify { score_is_now "40-40 deuce" }
         end
       end
 
       context "B" do
         before(:each) { tennis.point_to_player_b }
-        specify { expect(@score).to be == "40-40 advantage B" }
+        specify { score_is_now "40-40 advantage B" }
 
         context "A" do
           before(:each) { tennis.point_to_player_a }
-          specify { expect(@score).to be == "40-40 deuce" }
+          specify { score_is_now "40-40 deuce" }
         end
 
         context "B" do
           before(:each) { tennis.point_to_player_b }
-          specify { expect(@score).to be == "Game to B" }
+          specify { score_is_now "Game to B" }
         end
       end
     end
