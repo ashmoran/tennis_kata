@@ -10,12 +10,12 @@ class Tennis
   end
 
   def point_to_player_a
-    @player_a_score += 15
+    @player_a_score += 1
     score_changed
   end
 
   def point_to_player_b
-    @player_b_score += 15
+    @player_b_score += 1
     score_changed
   end
 
@@ -26,6 +26,17 @@ class Tennis
   end
 
   def score_for_display
-    "#{@player_a_score}-#{@player_b_score}"
+    "#{format_score(@player_a_score)}-#{format_score(@player_b_score)}"
+  end
+
+  SCORE_FORMATS = {
+    0 => 0,
+    1 => 15,
+    2 => 30,
+    3 => 40
+  }
+
+  def format_score(score)
+    SCORE_FORMATS[score]
   end
 end
