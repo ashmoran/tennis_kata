@@ -8,10 +8,6 @@ describe Tennis do
   subject(:tennis) { Tennis.new(self) }
 
   context "game not started" do
-    it "has not broadcast a score" do
-      expect(@score).to be == :game_not_started
-    end
-
     describe "trying to score" do
       it "raises an error" do
         expect {
