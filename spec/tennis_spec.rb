@@ -7,6 +7,10 @@ describe Tennis do
 
   subject(:tennis) { Tennis.new(self) }
 
+  def score_changed(new_score)
+    @score = new_score
+  end
+
   for_context :game_not_started do
     nothing
   end

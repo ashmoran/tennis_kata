@@ -30,11 +30,6 @@ module TennisSpec
     end
   end
 
-  # Self-shunt
-  def score_changed(new_score)
-    @score = new_score
-  end
-
   def nothing
     # NOOP
   end
