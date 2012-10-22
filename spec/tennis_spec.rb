@@ -121,6 +121,11 @@ describe Tennis do
         before(:each) { tennis.point_to_player_b }
         specify { expect(@score).to be == "40-40 advantage B" }
 
+        context "A" do
+          before(:each) { tennis.point_to_player_a }
+          specify { expect(@score).to be == "40-40 deuce" }
+        end
+
         context "B" do
           before(:each) { tennis.point_to_player_b }
           specify { expect(@score).to be == "Game to B" }
