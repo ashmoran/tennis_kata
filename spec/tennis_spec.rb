@@ -31,19 +31,21 @@ describe Tennis do
 
     context "A" do
       before(:each) { tennis.point_to_player_a }
-
       specify { expect(@score).to be == "15-0" }
 
       context "A" do
         before(:each) { tennis.point_to_player_a }
-
         specify { expect(@score).to be == "30-0" }
       end
 
       context "B" do
         before(:each) { tennis.point_to_player_b }
-
         specify { expect(@score).to be == "15-15" }
+
+        context "A" do
+          before(:each) { tennis.point_to_player_a }
+          specify { expect(@score).to be == "30-15" }
+        end
       end
     end
   end
