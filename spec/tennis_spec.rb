@@ -18,6 +18,10 @@ describe Tennis do
     expect(@score).to be == score
   end
 
+  def self.score_is_now(score)
+    specify { score_is_now(score) }
+  end
+
   context "game not started" do
     it "has not broadcast a score" do
       expect(@score).to be == :game_not_started
@@ -46,28 +50,28 @@ describe Tennis do
     context "with no advantages" do
       context "A" do
         before(:each) { tennis.point_to_player_a }
-        specify { score_is_now "15-0" }
+        score_is_now "15-0"
 
         context "A" do
           before(:each) { tennis.point_to_player_a }
-          specify { score_is_now "30-0" }
+          score_is_now "30-0"
         end
 
         context "B" do
           before(:each) { tennis.point_to_player_b }
-          specify { score_is_now "15-15" }
+          score_is_now "15-15"
 
           context "A" do
             before(:each) { tennis.point_to_player_a }
-            specify { score_is_now "30-15" }
+            score_is_now "30-15"
 
             context "A" do
               before(:each) { tennis.point_to_player_a }
-              specify { score_is_now "40-15" }
+              score_is_now "40-15"
 
               context "A" do
                 before(:each) { tennis.point_to_player_a }
-                specify { score_is_now "Game to A" }
+                score_is_now "Game to A"
               end
             end
           end
@@ -82,7 +86,7 @@ describe Tennis do
           tennis.point_to_player_b
         end
 
-        specify { score_is_now "Game to B" }
+        score_is_now "Game to B"
       end
     end
 
@@ -105,35 +109,35 @@ describe Tennis do
         end
       end
 
-      specify { score_is_now "40-40 deuce" }
+      score_is_now "40-40 deuce"
 
       context "A" do
         before(:each) { tennis.point_to_player_a }
-        specify { score_is_now "40-40 advantage A" }
+        score_is_now "40-40 advantage A"
 
         context "A" do
           before(:each) { tennis.point_to_player_a }
-          specify { score_is_now "Game to A" }
+          score_is_now "Game to A"
         end
 
         context "B" do
           before(:each) { tennis.point_to_player_b }
-          specify { score_is_now "40-40 deuce" }
+          score_is_now "40-40 deuce"
         end
       end
 
       context "B" do
         before(:each) { tennis.point_to_player_b }
-        specify { score_is_now "40-40 advantage B" }
+        score_is_now "40-40 advantage B"
 
         context "A" do
           before(:each) { tennis.point_to_player_a }
-          specify { score_is_now "40-40 deuce" }
+          score_is_now "40-40 deuce"
         end
 
         context "B" do
           before(:each) { tennis.point_to_player_b }
-          specify { score_is_now "Game to B" }
+          score_is_now "Game to B"
         end
       end
     end
