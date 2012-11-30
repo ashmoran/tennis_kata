@@ -2,7 +2,8 @@ class TennisScorePairs
   TRANSITIONS = {
     [0,  0]  => [15, 0],
     [15, 0]  => [30, 0],
-    [30, 0]  => [40, 0]
+    [30, 0]  => [40, 0],
+    [40, 0]  => :player_a_won
   }
 
   def initialize(scoreboard)
@@ -30,6 +31,14 @@ class TennisScorePairs
   end
 
   def humanize(score)
-    "#{score[0]}-#{score[1]}"
+    if game_in_progress?
+      "#{score[0]}-#{score[1]}"
+    else
+      "Game to A"
+    end
+  end
+
+  def game_in_progress?
+    @score.is_a?(Array)
   end
 end
