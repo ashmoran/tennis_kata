@@ -1,6 +1,6 @@
 require 'state_machine'
 
-class Tennis
+class TennisStateMachine
   state_machine initial: :not_started do
     event :start_game do
       transition :not_started => :in_progress
