@@ -42,12 +42,12 @@ shared_examples_for "Tennis" do
       # easily add a check for the same score being sent more than once
       expect(@scores.last).to_not be == @scores[-2]
     end
+  end
 
-    game_not_started do
-      it "is not ready for players to score points" do
-        expect { tennis.point_to_player_a }.to raise_error(RuntimeError, "Game has not started yet")
-        expect { tennis.point_to_player_b }.to raise_error(RuntimeError, "Game has not started yet")
-      end
+  game_not_started do
+    it "is not ready for players to score points" do
+      expect { tennis.point_to_player_a }.to raise_error(RuntimeError, "Game has not started yet")
+      expect { tennis.point_to_player_b }.to raise_error(RuntimeError, "Game has not started yet")
     end
   end
 
