@@ -2,7 +2,8 @@
 # went about this using tuples in Python to store the state and transitions...
 #   https://gist.github.com/4177408
 # ...so I had a go in Ruby, without looking at Robie's code in detail first.
-
+# Obviously this could be improved a lot, but I just wanted to have a go at
+# making it work. (It passed the contract I extracted from my first solution.)
 class TennisScorePairs
   # I didn't remember how Robie did this so I ended up with
   # 2 and 3 length arrays, just because for some reason I
