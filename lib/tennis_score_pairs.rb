@@ -4,28 +4,28 @@
 # ...so I had a go in Ruby, without looking at Robie's code in detail first.
 
 class TennisScorePairs
+  # I didn't remember how Robie did this so I ended up with
+  # 2 and 3 length arrays, just because for some reason I
+  # decided testing array length was a good idea
   TRANSITIONS = {
     [0,   0]  => [15,  0],
-
-    [15,  0]  => [30,  0],
     [0,  15]  => [15, 15],
-
-    [30,  0]  => [40,  0],
-    [15, 15]  => [30, 15],
     [0,  30]  => [15, 30],
-
-    [40,  0]  => [:A, :won, :B],
-    [30, 15]  => [40, 15],
-    [15, 30]  => [30, 30],
     [0,  40]  => [15, 40],
 
-    [40, 15]  => [:A, :won, :B],
-    [30, 30]  => [40, 30],
+    [15,  0]  => [30,  0],
+    [15, 15]  => [30, 15],
+    [15, 30]  => [30, 30],
     [15, 40]  => [30, 40],
 
-    [40, 30]  => [:A, :won, :B],
+    [30,  0]  => [40,  0],
+    [30, 15]  => [40, 15],
+    [30, 30]  => [40, 30],
     [30, 40]  => [40, 40],
 
+    [40,  0]  => [:A, :won, :B],
+    [40, 15]  => [:A, :won, :B],
+    [40, 30]  => [:A, :won, :B],
     [40, 40]  => [:A, :adv, :B],
 
     [:A, :adv, :B]  => [:A, :won, :B],
