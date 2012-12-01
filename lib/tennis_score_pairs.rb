@@ -1,3 +1,8 @@
+# I quite liked the look of the way Robie Basak ( https://github.com/basak )
+# went about this using tuples in Python to store the state and transitions...
+#   https://gist.github.com/4177408
+# ...so I had a go in Ruby, without looking at Robie's code in detail first.
+
 class TennisScorePairs
   TRANSITIONS = {
     [0,   0]  => [15,  0],
@@ -30,20 +35,34 @@ class TennisScorePairs
   def initialize(scoreboard)
     @scoreboard = scoreboard
     @score = [0, 0]
+    extend GameNotStarted
   end
 
   def start_game
+    extend GameStarted
     score_changed
   end
 
-  def point_to_player_a
-    @score = TRANSITIONS[@score]
-    score_changed
+  module GameNotStarted
+    def point_to_player_a
+      raise RuntimeError.new("Game has not started yet")
+    end
+
+    def point_to_player_b
+      raise RuntimeError.new("Game has not started yet")
+    end
   end
 
-  def point_to_player_b
-    @score = TRANSITIONS[@score.reverse].reverse
-    score_changed
+  module GameStarted
+    def point_to_player_a
+      @score = TRANSITIONS[@score]
+      score_changed
+    end
+
+    def point_to_player_b
+      @score = TRANSITIONS[@score.reverse].reverse
+      score_changed
+    end
   end
 
   private
