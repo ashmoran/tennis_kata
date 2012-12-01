@@ -19,7 +19,12 @@ class TennisScorePairs
     [15, 40]  => [30, 40],
 
     [40, 30]  => [:A, :won, :B],
-    [30, 40]  => [40, 40]
+    [30, 40]  => [40, 40],
+
+    [40, 40]  => [:A, :adv, :B],
+
+    [:A, :adv, :B]  => [:A, :won, :B],
+    [:B, :adv, :A]  => [40, 40]
   }
 
   def initialize(scoreboard)
@@ -48,22 +53,32 @@ class TennisScorePairs
   end
 
   def humanize(score)
-    if game_in_progress?
+    if normal_scoring?
       "#{score[0]}-#{score[1]}" + elaboration(@score)
+    elsif advantage?
+      "40-40 advantage #{@score.first}"
     else
       "Game to #{@score.first}"
     end
   end
 
   def elaboration(score)
-    if score == [40, 40]
+    if deuce?
       " deuce"
     else
       ""
     end
   end
 
-  def game_in_progress?
+  def deuce?
+    @score == [40, 40]
+  end
+
+  def advantage?
+    @score[1] == :adv
+  end
+
+  def normal_scoring?
     @score.length == 2
   end
 end
