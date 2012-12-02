@@ -4,63 +4,66 @@
 # ...so I had a go in Ruby, without looking at Robie's code in detail first.
 # Obviously this could be improved a lot, but I just wanted to have a go at
 # making it work. (It passed the contract I extracted from my first solution.)
+
+require_relative 'tennis_score_pairs/scores'
+
 class TennisScorePairs
   # I didn't remember how Robie did this so I ended up with
   # 2 and 3 length arrays, just because for some reason I
   # decided testing array length was a good idea
   WHEN_A_SCORES = {
-    [0,   0]  => [15,  0],
-    [0,  15]  => [15, 15],
-    [0,  30]  => [15, 30],
-    [0,  40]  => [15, 40],
+    Score.new(0, 0)   => Score.new(15, 0),
+    Score.new(0, 15)  => Score.new(15, 15),
+    Score.new(0, 30)  => Score.new(15, 30),
+    Score.new(0, 40)  => Score.new(15, 40),
 
-    [15,  0]  => [30,  0],
-    [15, 15]  => [30, 15],
-    [15, 30]  => [30, 30],
-    [15, 40]  => [30, 40],
+    Score.new(15, 0)  => Score.new(30, 0),
+    Score.new(15, 15) => Score.new(30, 15),
+    Score.new(15, 30) => Score.new(30, 30),
+    Score.new(15, 40) => Score.new(30, 40),
 
-    [30,  0]  => [40,  0],
-    [30, 15]  => [40, 15],
-    [30, 30]  => [40, 30],
-    [30, 40]  => [40, 40],
+    Score.new(30, 0)  => Score.new(40, 0),
+    Score.new(30, 15) => Score.new(40, 15),
+    Score.new(30, 30) => Score.new(40, 30),
+    Score.new(30, 40) => Deuce.new,
 
-    [40,  0]  => [:A, :won],
-    [40, 15]  => [:A, :won],
-    [40, 30]  => [:A, :won],
-    [40, 40]  => [:A, :adv],
+    Score.new(40, 0)  => [:A, :won],
+    Score.new(40, 15) => [:A, :won],
+    Score.new(40, 30) => [:A, :won],
+    Deuce.new         => [:A, :adv],
 
-    [:A, :adv]  => [:A, :won],
-    [:B, :adv]  => [40, 40]
+    [:A, :adv]        => [:A, :won],
+    [:B, :adv]        => Deuce.new
   }
 
   WHEN_B_SCORES = {
-    [0,   0]  => [0,  15],
-    [0,  15]  => [0,  30],
-    [0,  30]  => [0,  40],
-    [0,  40]  => [:B, :won],
+    Score.new(0, 0)   => Score.new(0, 15),
+    Score.new(0, 15)  => Score.new(0, 30),
+    Score.new(0, 30)  => Score.new(0, 40),
+    Score.new(0, 40)  => [:B, :won],
 
-    [15,  0]  => [15, 15],
-    [15, 15]  => [15, 30],
-    [15, 30]  => [15, 40],
-    [15, 40]  => [:B, :won],
+    Score.new(15, 0)  => Score.new(15, 15),
+    Score.new(15, 15) => Score.new(15, 30),
+    Score.new(15, 30) => Score.new(15, 40),
+    Score.new(15, 40) => [:B, :won],
 
-    [30,  0]  => [30, 15],
-    [30, 15]  => [30, 30],
-    [30, 30]  => [30, 40],
-    [30, 40]  => [:B, :won],
+    Score.new(30, 0)  => Score.new(30, 15),
+    Score.new(30, 15) => Score.new(30, 30),
+    Score.new(30, 30) => Score.new(30, 40),
+    Score.new(30, 40) => [:B, :won],
 
-    [40,  0]  => [40, 15],
-    [40, 15]  => [40, 30],
-    [40, 30]  => [40, 40],
-    [40, 40]  => [:B, :adv],
+    Score.new(40, 0)  => Score.new(40, 15),
+    Score.new(40, 15) => Score.new(40, 30),
+    Score.new(40, 30) => Deuce.new,
+    Deuce.new         => [:B, :adv],
 
-    [:A, :adv]  => [40, 40],
-    [:B, :adv]  => [:B, :won]
+    [:A, :adv]        => Deuce.new,
+    [:B, :adv]        => [:B, :won]
   }
 
   def initialize(scoreboard)
     @scoreboard = scoreboard
-    @score = [0, 0]
+    @score = Score.new(0, 0)
     extend GameNotStarted
   end
 
@@ -98,32 +101,18 @@ class TennisScorePairs
   end
 
   def humanize(score)
-    if normal_scoring?
-      "#{score[0]}-#{score[1]}" + elaboration(@score)
-    elsif advantage?
-      "40-40 advantage #{@score.first}"
-    else
-      "Game to #{@score.first}"
+    begin
+      score.humanize
+    rescue NoMethodError => e
+      if advantage?
+        "40-40 advantage #{@score.first}"
+      else
+        "Game to #{@score.first}"
+      end
     end
-  end
-
-  def elaboration(score)
-    if deuce?
-      " deuce"
-    else
-      ""
-    end
-  end
-
-  def deuce?
-    @score == [40, 40]
   end
 
   def advantage?
-    @score.last == :adv
-  end
-
-  def normal_scoring?
-    @score.map(&:class).uniq. == [Fixnum]
+    @score.is_a?(Array) && @score.last == :adv
   end
 end
