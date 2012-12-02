@@ -12,6 +12,8 @@ class TennisScorePairs
   # 2 and 3 length arrays, just because for some reason I
   # decided testing array length was a good idea
   WHEN_A_SCORES = {
+    GameNotStarted.new  => GameNotStarted.new,
+
     Score.new(0, 0)     => Score.new(15, 0),
     Score.new(0, 15)    => Score.new(15, 15),
     Score.new(0, 30)    => Score.new(15, 30),
@@ -37,6 +39,8 @@ class TennisScorePairs
   }
 
   WHEN_B_SCORES = {
+    GameNotStarted.new  => GameNotStarted.new,
+
     Score.new(0, 0)     => Score.new(0, 15),
     Score.new(0, 15)    => Score.new(0, 30),
     Score.new(0, 30)    => Score.new(0, 40),
@@ -63,35 +67,22 @@ class TennisScorePairs
 
   def initialize(scoreboard)
     @scoreboard = scoreboard
-    @score = Score.new(0, 0)
-    extend GameNotStarted
+    @score = GameNotStarted.new
   end
 
   def start_game
-    extend GameStarted
+    @score = Score.new(0, 0)
     score_changed
   end
 
-  module GameNotStarted
-    def point_to_player_a
-      raise RuntimeError.new("Game has not started yet")
-    end
-
-    def point_to_player_b
-      raise RuntimeError.new("Game has not started yet")
-    end
+  def point_to_player_a
+    @score = WHEN_A_SCORES[@score]
+    score_changed
   end
 
-  module GameStarted
-    def point_to_player_a
-      @score = WHEN_A_SCORES[@score]
-      score_changed
-    end
-
-    def point_to_player_b
-      @score = WHEN_B_SCORES[@score]
-      score_changed
-    end
+  def point_to_player_b
+    @score = WHEN_B_SCORES[@score]
+    score_changed
   end
 
   private

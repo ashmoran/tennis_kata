@@ -1,3 +1,17 @@
+class GameNotStarted
+  def to_s
+    raise RuntimeError.new("Game has not started yet")
+  end
+
+  def eql?(other)
+    other.is_a?(GameNotStarted)
+  end
+
+  def hash
+    "GameNotStarted".hash
+  end
+end
+
 class Score
   def initialize(player_a_score, player_b_score)
     @player_a_score = player_a_score
