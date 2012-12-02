@@ -71,23 +71,21 @@ class TennisScorePairs
   end
 
   def start_game
-    @score = Score.new(0, 0)
-    score_changed
+    change_score_to(Score.new(0, 0))
   end
 
   def point_to_player_a
-    @score = WHEN_A_SCORES[@score]
-    score_changed
+    change_score_to(WHEN_A_SCORES[@score])
   end
 
   def point_to_player_b
-    @score = WHEN_B_SCORES[@score]
-    score_changed
+    change_score_to(WHEN_B_SCORES[@score])
   end
 
   private
 
-  def score_changed
+  def change_score_to(new_score)
+    @score = new_score
     @scoreboard.score_changed(@score.to_s)
   end
 end
