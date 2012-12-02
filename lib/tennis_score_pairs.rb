@@ -8,7 +8,7 @@ class TennisScorePairs
   # I didn't remember how Robie did this so I ended up with
   # 2 and 3 length arrays, just because for some reason I
   # decided testing array length was a good idea
-  TRANSITIONS = {
+  WHEN_A_SCORES = {
     [0,   0]  => [15,  0],
     [0,  15]  => [15, 15],
     [0,  30]  => [15, 30],
@@ -31,6 +31,31 @@ class TennisScorePairs
 
     [:A, :adv, :B]  => [:A, :won, :B],
     [:B, :adv, :A]  => [40, 40]
+  }
+
+  WHEN_B_SCORES = {
+    [0,   0]  => [0,  15],
+    [0,  15]  => [0,  30],
+    [0,  30]  => [0,  40],
+    [0,  40]  => [:B, :won, :A],
+
+    [15,  0]  => [15, 15],
+    [15, 15]  => [15, 30],
+    [15, 30]  => [15, 40],
+    [15, 40]  => [:B, :won, :A],
+
+    [30,  0]  => [30, 15],
+    [30, 15]  => [30, 30],
+    [30, 30]  => [30, 40],
+    [30, 40]  => [:B, :won, :A],
+
+    [40,  0]  => [40, 15],
+    [40, 15]  => [40, 30],
+    [40, 30]  => [40, 40],
+    [40, 40]  => [:B, :adv, :A],
+
+    [:A, :adv, :B]  => [40, 40],
+    [:B, :adv, :A]  => [:B, :won, :A]
   }
 
   def initialize(scoreboard)
@@ -56,12 +81,12 @@ class TennisScorePairs
 
   module GameStarted
     def point_to_player_a
-      @score = TRANSITIONS[@score]
+      @score = WHEN_A_SCORES[@score]
       score_changed
     end
 
     def point_to_player_b
-      @score = TRANSITIONS[@score.reverse].reverse
+      @score = WHEN_B_SCORES[@score]
       score_changed
     end
   end
