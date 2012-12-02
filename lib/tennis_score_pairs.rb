@@ -12,53 +12,53 @@ class TennisScorePairs
   # 2 and 3 length arrays, just because for some reason I
   # decided testing array length was a good idea
   WHEN_A_SCORES = {
-    Score.new(0, 0)   => Score.new(15, 0),
-    Score.new(0, 15)  => Score.new(15, 15),
-    Score.new(0, 30)  => Score.new(15, 30),
-    Score.new(0, 40)  => Score.new(15, 40),
+    Score.new(0, 0)     => Score.new(15, 0),
+    Score.new(0, 15)    => Score.new(15, 15),
+    Score.new(0, 30)    => Score.new(15, 30),
+    Score.new(0, 40)    => Score.new(15, 40),
 
-    Score.new(15, 0)  => Score.new(30, 0),
-    Score.new(15, 15) => Score.new(30, 15),
-    Score.new(15, 30) => Score.new(30, 30),
-    Score.new(15, 40) => Score.new(30, 40),
+    Score.new(15, 0)    => Score.new(30, 0),
+    Score.new(15, 15)   => Score.new(30, 15),
+    Score.new(15, 30)   => Score.new(30, 30),
+    Score.new(15, 40)   => Score.new(30, 40),
 
-    Score.new(30, 0)  => Score.new(40, 0),
-    Score.new(30, 15) => Score.new(40, 15),
-    Score.new(30, 30) => Score.new(40, 30),
-    Score.new(30, 40) => Deuce.new,
+    Score.new(30, 0)    => Score.new(40, 0),
+    Score.new(30, 15)   => Score.new(40, 15),
+    Score.new(30, 30)   => Score.new(40, 30),
+    Score.new(30, 40)   => Deuce.new,
 
-    Score.new(40, 0)  => [:A, :won],
-    Score.new(40, 15) => [:A, :won],
-    Score.new(40, 30) => [:A, :won],
-    Deuce.new         => [:A, :adv],
+    Score.new(40, 0)    => [:A, :won],
+    Score.new(40, 15)   => [:A, :won],
+    Score.new(40, 30)   => [:A, :won],
+    Deuce.new           => Advantage.new("A"),
 
-    [:A, :adv]        => [:A, :won],
-    [:B, :adv]        => Deuce.new
+    Advantage.new("A")  => [:A, :won],
+    Advantage.new("B")  => Deuce.new
   }
 
   WHEN_B_SCORES = {
-    Score.new(0, 0)   => Score.new(0, 15),
-    Score.new(0, 15)  => Score.new(0, 30),
-    Score.new(0, 30)  => Score.new(0, 40),
-    Score.new(0, 40)  => [:B, :won],
+    Score.new(0, 0)     => Score.new(0, 15),
+    Score.new(0, 15)    => Score.new(0, 30),
+    Score.new(0, 30)    => Score.new(0, 40),
+    Score.new(0, 40)    => [:B, :won],
 
-    Score.new(15, 0)  => Score.new(15, 15),
-    Score.new(15, 15) => Score.new(15, 30),
-    Score.new(15, 30) => Score.new(15, 40),
-    Score.new(15, 40) => [:B, :won],
+    Score.new(15, 0)    => Score.new(15, 15),
+    Score.new(15, 15)   => Score.new(15, 30),
+    Score.new(15, 30)   => Score.new(15, 40),
+    Score.new(15, 40)   => [:B, :won],
 
-    Score.new(30, 0)  => Score.new(30, 15),
-    Score.new(30, 15) => Score.new(30, 30),
-    Score.new(30, 30) => Score.new(30, 40),
-    Score.new(30, 40) => [:B, :won],
+    Score.new(30, 0)    => Score.new(30, 15),
+    Score.new(30, 15)   => Score.new(30, 30),
+    Score.new(30, 30)   => Score.new(30, 40),
+    Score.new(30, 40)   => [:B, :won],
 
-    Score.new(40, 0)  => Score.new(40, 15),
-    Score.new(40, 15) => Score.new(40, 30),
-    Score.new(40, 30) => Deuce.new,
-    Deuce.new         => [:B, :adv],
+    Score.new(40, 0)    => Score.new(40, 15),
+    Score.new(40, 15)   => Score.new(40, 30),
+    Score.new(40, 30)   => Deuce.new,
+    Deuce.new           => Advantage.new("B"),
 
-    [:A, :adv]        => Deuce.new,
-    [:B, :adv]        => [:B, :won]
+    Advantage.new("A")  => Deuce.new,
+    Advantage.new("B")  => [:B, :won]
   }
 
   def initialize(scoreboard)
@@ -104,15 +104,7 @@ class TennisScorePairs
     begin
       score.humanize
     rescue NoMethodError => e
-      if advantage?
-        "40-40 advantage #{@score.first}"
-      else
-        "Game to #{@score.first}"
-      end
+      "Game to #{@score.first}"
     end
-  end
-
-  def advantage?
-    @score.is_a?(Array) && @score.last == :adv
   end
 end

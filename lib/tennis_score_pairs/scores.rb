@@ -11,7 +11,7 @@ class Score
   alias_method :humanize, :to_s
 
   def eql?(other)
-    player_a_score == other.player_a_score && player_b_score == other.player_b_score
+    @player_a_score == other.player_a_score && @player_b_score == other.player_b_score
   end
 
   def hash
@@ -37,4 +37,28 @@ class Deuce
   def hash
     to_s.hash
   end
+end
+
+class Advantage
+  def initialize(player)
+    @player = player
+  end
+
+  def to_s
+    "40-40 advantage #{@player}"
+  end
+
+  alias_method :humanize, :to_s
+
+  def eql?(other)
+    other.is_a?(Advantage) && @player == other.player
+  end
+
+  def hash
+    to_s.hash
+  end
+
+  protected
+
+  attr_reader :player
 end
