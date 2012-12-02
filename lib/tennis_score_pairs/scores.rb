@@ -62,3 +62,27 @@ class Advantage
 
   attr_reader :player
 end
+
+class WonBy
+  def initialize(player)
+    @player = player
+  end
+
+  def to_s
+    "Game to #{@player}"
+  end
+
+  alias_method :humanize, :to_s
+
+  def eql?(other)
+    other.is_a?(WonBy) && @player == other.player
+  end
+
+  def hash
+    to_s.hash
+  end
+
+  protected
+
+  attr_reader :player
+end

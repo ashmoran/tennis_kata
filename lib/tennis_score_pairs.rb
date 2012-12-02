@@ -27,12 +27,12 @@ class TennisScorePairs
     Score.new(30, 30)   => Score.new(40, 30),
     Score.new(30, 40)   => Deuce.new,
 
-    Score.new(40, 0)    => [:A, :won],
-    Score.new(40, 15)   => [:A, :won],
-    Score.new(40, 30)   => [:A, :won],
+    Score.new(40, 0)    => WonBy.new("A"),
+    Score.new(40, 15)   => WonBy.new("A"),
+    Score.new(40, 30)   => WonBy.new("A"),
     Deuce.new           => Advantage.new("A"),
 
-    Advantage.new("A")  => [:A, :won],
+    Advantage.new("A")  => WonBy.new("A"),
     Advantage.new("B")  => Deuce.new
   }
 
@@ -40,17 +40,17 @@ class TennisScorePairs
     Score.new(0, 0)     => Score.new(0, 15),
     Score.new(0, 15)    => Score.new(0, 30),
     Score.new(0, 30)    => Score.new(0, 40),
-    Score.new(0, 40)    => [:B, :won],
+    Score.new(0, 40)    => WonBy.new("B"),
 
     Score.new(15, 0)    => Score.new(15, 15),
     Score.new(15, 15)   => Score.new(15, 30),
     Score.new(15, 30)   => Score.new(15, 40),
-    Score.new(15, 40)   => [:B, :won],
+    Score.new(15, 40)   => WonBy.new("B"),
 
     Score.new(30, 0)    => Score.new(30, 15),
     Score.new(30, 15)   => Score.new(30, 30),
     Score.new(30, 30)   => Score.new(30, 40),
-    Score.new(30, 40)   => [:B, :won],
+    Score.new(30, 40)   => WonBy.new("B"),
 
     Score.new(40, 0)    => Score.new(40, 15),
     Score.new(40, 15)   => Score.new(40, 30),
@@ -58,7 +58,7 @@ class TennisScorePairs
     Deuce.new           => Advantage.new("B"),
 
     Advantage.new("A")  => Deuce.new,
-    Advantage.new("B")  => [:B, :won]
+    Advantage.new("B")  => WonBy.new("B")
   }
 
   def initialize(scoreboard)
@@ -97,14 +97,6 @@ class TennisScorePairs
   private
 
   def score_changed
-    @scoreboard.score_changed(humanize(@score))
-  end
-
-  def humanize(score)
-    begin
-      score.humanize
-    rescue NoMethodError => e
-      "Game to #{@score.first}"
-    end
+    @scoreboard.score_changed(@score.to_s)
   end
 end
