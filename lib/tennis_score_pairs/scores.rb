@@ -8,8 +8,6 @@ class Score
     "#{@player_a_score}-#{@player_b_score}"
   end
 
-  alias_method :humanize, :to_s
-
   def eql?(other)
     @player_a_score == other.player_a_score && @player_b_score == other.player_b_score
   end
@@ -28,8 +26,6 @@ class Deuce
     "40-40 deuce"
   end
 
-  alias_method :humanize, :to_s
-
   def eql?(other)
     other.is_a?(Deuce)
   end
@@ -47,8 +43,6 @@ class Advantage
   def to_s
     "40-40 advantage #{@player}"
   end
-
-  alias_method :humanize, :to_s
 
   def eql?(other)
     other.is_a?(Advantage) && @player == other.player
@@ -71,8 +65,6 @@ class WonBy
   def to_s
     "Game to #{@player}"
   end
-
-  alias_method :humanize, :to_s
 
   def eql?(other)
     other.is_a?(WonBy) && @player == other.player
