@@ -1,3 +1,13 @@
+# Objects that play the "Score" role have only two responsibities:
+# * They must be able to turn themselves into strings (for the human UI)
+# * They must be able to identify each other in a Hash (for score transitions)
+
+# These classes are the result of moving conditional logic from out of the
+# original TennisScorePairs code. This makes the code longer (as we have to
+# name everything now, and we can no longer rely on the built-in hash semantics
+# for Arrays) but means there is no conditional logic anywhere in the behaviour
+# of the app (woop!).
+
 class GameNotStarted
   def to_s
     raise RuntimeError.new("Game has not started yet")
