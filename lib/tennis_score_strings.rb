@@ -11,58 +11,31 @@ class TennisScoreStrings
     raise RuntimeError.new("Game has not started yet")
   end
 
-  WHEN_A_SCORES = {
-    GAME_NOT_STARTED    => GAME_NOT_STARTED,
+  SCORE_TRANSITIONS = {
+    GAME_NOT_STARTED    => { a: GAME_NOT_STARTED,     b: GAME_NOT_STARTED },
 
-    "0-0"               => "15-0",
-    "0-15"              => "15-15",
-    "0-30"              => "15-30",
-    "0-40"              => "15-40",
+    "0-0"               => { a: "15-0",               b: "0-15" },
+    "0-15"              => { a: "15-15",              b: "0-30" },
+    "0-30"              => { a: "15-30",              b: "0-40" },
+    "0-40"              => { a: "15-40",              b: "Game to B" },
 
-    "15-0"              => "30-0",
-    "15-15"             => "30-15",
-    "15-30"             => "30-30",
-    "15-40"             => "30-40",
+    "15-0"              => { a: "30-0",               b: "15-15" },
+    "15-15"             => { a: "30-15",              b: "15-30" },
+    "15-30"             => { a: "30-30",              b: "15-40" },
+    "15-40"             => { a: "30-40",              b: "Game to B" },
 
-    "30-0"              => "40-0",
-    "30-15"             => "40-15",
-    "30-30"             => "40-30",
-    "30-40"             => "40-40 deuce",
+    "30-0"              => { a: "40-0",               b: "30-15" },
+    "30-15"             => { a: "40-15",              b: "30-30" },
+    "30-30"             => { a: "40-30",              b: "30-40" },
+    "30-40"             => { a: "40-40 deuce",        b: "Game to B" },
 
-    "40-0"              => "Game to A",
-    "40-15"             => "Game to A",
-    "40-30"             => "Game to A",
-    "40-40 deuce"       => "40-40 advantage A",
+    "40-0"              => { a: "Game to A",          b: "40-15" },
+    "40-15"             => { a: "Game to A",          b: "40-30" },
+    "40-30"             => { a: "Game to A",          b: "40-40 deuce" },
+    "40-40 deuce"       => { a: "40-40 advantage A",  b: "40-40 advantage B" },
 
-    "40-40 advantage A" => "Game to A",
-    "40-40 advantage B" => "40-40 deuce"
-  }
-
-  WHEN_B_SCORES = {
-    GAME_NOT_STARTED    => GAME_NOT_STARTED,
-
-    "0-0"               => "0-15",
-    "0-15"              => "0-30",
-    "0-30"              => "0-40",
-    "0-40"              => "Game to B",
-
-    "15-0"              => "15-15",
-    "15-15"             => "15-30",
-    "15-30"             => "15-40",
-    "15-40"             => "Game to B",
-
-    "30-0"              => "30-15",
-    "30-15"             => "30-30",
-    "30-30"             => "30-40",
-    "30-40"             => "Game to B",
-
-    "40-0"              => "40-15",
-    "40-15"             => "40-30",
-    "40-30"             => "40-40 deuce",
-    "40-40 deuce"       => "40-40 advantage B",
-
-    "40-40 advantage A" => "40-40 deuce",
-    "40-40 advantage B" => "Game to B"
+    "40-40 advantage A" => { a: "Game to A",          b: "40-40 deuce" },
+    "40-40 advantage B" => { a: "40-40 deuce",        b: "Game to B" }
   }
 
   def initialize(scoreboard)
@@ -75,11 +48,11 @@ class TennisScoreStrings
   end
 
   def point_to_player_a
-    change_score_to(WHEN_A_SCORES[@score])
+    change_score_to(SCORE_TRANSITIONS[@score][:a])
   end
 
   def point_to_player_b
-    change_score_to(WHEN_B_SCORES[@score])
+    change_score_to(SCORE_TRANSITIONS[@score][:b])
   end
 
   private
